@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RequestMapping("/api")
 @SecurityRequirement(name = "E-Commerce Application")
 public class OrderController {
-	
+
 	@Autowired
 	public OrderService orderService;
 	
@@ -63,7 +63,7 @@ public class OrderController {
 	
 	@PutMapping("admin/users/{emailId}/orders/{orderId}/orderStatus/{orderStatus}")
 	public ResponseEntity<OrderDTO> updateOrderByUser(@PathVariable String emailId, @PathVariable Long orderId, @PathVariable String orderStatus) {
-		OrderDTO order = orderService.updateOrder(emailId, orderId, orderStatus);
+		OrderDTO order = orderService.updateOrderStatus(emailId, orderId, orderStatus);
 		
 		return new ResponseEntity<OrderDTO>(order, HttpStatus.OK);
 	}

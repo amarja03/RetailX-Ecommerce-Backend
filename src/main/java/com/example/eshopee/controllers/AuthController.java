@@ -2,12 +2,12 @@ package com.example.eshopee.controllers;
 
 import java.util.Collections;
 import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,41 +17,40 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.eshopee.exceptions.UserNotFoundException;
 import com.example.eshopee.payloads.LoginCredentials;
 import com.example.eshopee.payloads.UserDTO;
-import com.example.eshopee.security.JWTUtil;
+import com.example.eshopee.filter.JWTUtil;
 import com.example.eshopee.services.UserService;
-
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
-@SecurityRequirement(name = "E-Commerce Application")
 public class AuthController {
 
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
 
-	@Autowired
-	private JWTUtil jwtUtil;
+	private final PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+	private final JWTUtil jwtUtil;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private final AuthenticationManager authenticationManager;
+
+	public AuthController(UserService userService, PasswordEncoder passwordEncoder, JWTUtil jwtUtil, AuthenticationManager authenticationManager) {
+		this.userService = userService;
+		this.passwordEncoder = passwordEncoder;
+		this.jwtUtil = jwtUtil;
+		this.authenticationManager = authenticationManager;
+	}
 
 	@PostMapping("/register")
-	public ResponseEntity<Map<String, Object>> registerHandler(@Valid @RequestBody UserDTO user) throws UserNotFoundException {
+	public ResponseEntity<String> registerHandler(@Valid @RequestBody UserDTO user) throws UserNotFoundException {
 		String encodedPass = passwordEncoder.encode(user.getPassword());
 
 		user.setPassword(encodedPass);
 
-		UserDTO userDTO = userService.registerUser(user);
-
-		String token = jwtUtil.generateToken(userDTO.getEmail());
-
-		return new ResponseEntity<Map<String, Object>>(Collections.singletonMap("jwt-token", token),
-				HttpStatus.CREATED);
+		userService.registerUser(user);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String token = jwtUtil.generateToken();
+		return ResponseEntity.status(HttpStatus.CREATED).body("Token : " + token);
 	}
 
 	@PostMapping("/login")
@@ -60,9 +59,11 @@ public class AuthController {
 		UsernamePasswordAuthenticationToken authCredentials = new UsernamePasswordAuthenticationToken(
 				credentials.getEmail(), credentials.getPassword());
 
-		authenticationManager.authenticate(authCredentials);
+		Authentication authentication = authenticationManager.authenticate(authCredentials);
 
-		String token = jwtUtil.generateToken(credentials.getEmail());
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String token = jwtUtil.generateToken();
 
 		return Collections.singletonMap("jwt-token", token);
 	}

@@ -1,23 +1,20 @@
 package com.example.eshopee.entites;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "addresses")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Address {
@@ -51,15 +48,9 @@ public class Address {
 	private String pincode;
 
 	@ManyToMany(mappedBy = "addresses")
+	@ToString.Exclude
 	private List<User> users = new ArrayList<>();
 
-	public Address(String country, String state, String city, String pincode, String street, String buildingName) {
-		this.country = country;
-		this.state = state;
-		this.city = city;
-		this.pincode = pincode;
-		this.street = street;
-		this.buildingName = buildingName;
-	}
+
 
 }

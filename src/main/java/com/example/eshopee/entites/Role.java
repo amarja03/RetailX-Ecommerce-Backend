@@ -12,10 +12,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Table(name = "roles")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Role {
 
 	@Id

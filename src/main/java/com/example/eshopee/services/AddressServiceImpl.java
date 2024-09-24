@@ -56,8 +56,9 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public List<AddressDTO> getAddresses() {
+		System.out.println("In address service");
 		List<Address> addresses = addressRepo.findAll();
-
+		System.out.println(addresses);
 		List<AddressDTO> addressDTOs = addresses.stream().map(address -> modelMapper.map(address, AddressDTO.class))
 				.collect(Collectors.toList());
 
@@ -119,7 +120,17 @@ public class AddressServiceImpl implements AddressService {
 
 		addressRepo.deleteById(addressId);
 
-		return "Address deleted succesfully with addressId: " + addressId;
+		return "Address deleted successfully with addressId: " + addressId;
 	}
+	/*
+	1. deleteAddress(Long addressId) method is implemented which deletes the address from the database.
+	2. updateAddress(Long addressId, Address address) method is implemented which updates the address in the database.
+	3. getAddress(Long addressId) method is implemented which returns the address from the database.
+	4. getAddresses() method is implemented which returns all the addresses from the database.
+	5. createAddress(AddressDTO addressDTO) method is implemented which creates the address in the database.
+
+	 */
 
 }
+
+

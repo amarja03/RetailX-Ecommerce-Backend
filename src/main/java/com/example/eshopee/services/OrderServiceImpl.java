@@ -93,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
 
 		List<CartItem> cartItems = cart.getCartItems();
 
-		if (cartItems.size() == 0) {
+		if (cartItems.isEmpty()) {
 			throw new APIException("Cart is empty");
 		}
 
@@ -137,7 +137,7 @@ public class OrderServiceImpl implements OrderService {
 		List<OrderDTO> orderDTOs = orders.stream().map(order -> modelMapper.map(order, OrderDTO.class))
 				.collect(Collectors.toList());
 
-		if (orderDTOs.size() == 0) {
+		if (orderDTOs.isEmpty()) {
 			throw new APIException("No orders placed yet by the user with email: " + emailId);
 		}
 
@@ -171,7 +171,7 @@ public class OrderServiceImpl implements OrderService {
 		List<OrderDTO> orderDTOs = orders.stream().map(order -> modelMapper.map(order, OrderDTO.class))
 				.collect(Collectors.toList());
 		
-		if (orderDTOs.size() == 0) {
+		if (orderDTOs.isEmpty()) {
 			throw new APIException("No orders placed yet by the users");
 		}
 
@@ -188,7 +188,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public OrderDTO updateOrder(String emailId, Long orderId, String orderStatus) {
+		public OrderDTO updateOrderStatus(String emailId, Long orderId, String orderStatus) {
 
 		Order order = orderRepo.findOrderByEmailAndOrderId(emailId, orderId);
 

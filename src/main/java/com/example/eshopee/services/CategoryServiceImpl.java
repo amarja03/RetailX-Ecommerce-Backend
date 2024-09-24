@@ -66,14 +66,14 @@ public class CategoryServiceImpl implements CategoryService {
 				.map(category -> modelMapper.map(category, CategoryDTO.class)).collect(Collectors.toList());
 
 		CategoryResponse categoryResponse = new CategoryResponse();
-		
+
 		categoryResponse.setContent(categoryDTOs);
 		categoryResponse.setPageNumber(pageCategories.getNumber());
 		categoryResponse.setPageSize(pageCategories.getSize());
 		categoryResponse.setTotalElements(pageCategories.getTotalElements());
 		categoryResponse.setTotalPages(pageCategories.getTotalPages());
 		categoryResponse.setLastPage(pageCategories.isLast());
-		
+
 		return categoryResponse;
 	}
 

@@ -46,27 +46,31 @@ public class CartServiceImpl implements CartService {
 				.orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
 
 		CartItem cartItem = cartItemRepo.findCartItemByProductIdAndCartId(cartId, productId);
-
+		CartItem newCartItem;
 		if (cartItem != null) {
-			throw new APIException("Product " + product.getProductName() + " already exists in the cart");
+			//Do not throw error. Just update the quantity of the product in the cart
+			cartItem.setQuantity(cartItem.getQuantity() + quantity);
+			newCartItem = cartItem;
+
+		} else {
+
+			if (product.getQuantity() == 0) {
+				throw new APIException(product.getProductName() + " is not available");
+			}
+
+			if (product.getQuantity() < quantity) {
+				throw new APIException("Please, make an order of the " + product.getProductName()
+						+ " less than or equal to the quantity " + product.getQuantity() + ".");
+			}
+
+			newCartItem = new CartItem();
+
+			newCartItem.setProduct(product);
+			newCartItem.setCart(cart);
+			newCartItem.setQuantity(quantity);
+			newCartItem.setDiscount(product.getDiscount());
+			newCartItem.setProductPrice(product.getSpecialPrice());
 		}
-
-		if (product.getQuantity() == 0) {
-			throw new APIException(product.getProductName() + " is not available");
-		}
-
-		if (product.getQuantity() < quantity) {
-			throw new APIException("Please, make an order of the " + product.getProductName()
-					+ " less than or equal to the quantity " + product.getQuantity() + ".");
-		}
-
-		CartItem newCartItem = new CartItem();
-
-		newCartItem.setProduct(product);
-		newCartItem.setCart(cart);
-		newCartItem.setQuantity(quantity);
-		newCartItem.setDiscount(product.getDiscount());
-		newCartItem.setProductPrice(product.getSpecialPrice());
 
 		cartItemRepo.save(newCartItem);
 
@@ -89,7 +93,7 @@ public class CartServiceImpl implements CartService {
 	public List<CartDTO> getAllCarts() {
 		List<Cart> carts = cartRepo.findAll();
 
-		if (carts.size() == 0) {
+		if (carts.isEmpty()) {
 			throw new APIException("No cart exists");
 		}
 

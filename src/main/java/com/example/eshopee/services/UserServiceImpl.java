@@ -34,7 +34,7 @@ import jakarta.transaction.Transactional;
 
 @Transactional
 @Service
-public class UserServiceImpl implements UserService {
+class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepo userRepo;
@@ -66,20 +66,18 @@ public class UserServiceImpl implements UserService {
 			Role role = roleRepo.findById(AppConstants.USER_ID).get();
 			user.getRoles().add(role);
 
-			String country = userDTO.getAddress().getCountry();
-			String state = userDTO.getAddress().getState();
-			String city = userDTO.getAddress().getCity();
-			String pincode = userDTO.getAddress().getPincode();
-			String street = userDTO.getAddress().getStreet();
-			String buildingName = userDTO.getAddress().getBuildingName();
+            String country = userDTO.getAddress().getCountry();
+            String state = userDTO.getAddress().getState();
+            String city = userDTO.getAddress().getCity();
+            String pincode = userDTO.getAddress().getPincode();
+            String street = userDTO.getAddress().getStreet();
+            String buildingName = userDTO.getAddress().getBuildingName();
 
-			Address address = addressRepo.findByCountryAndStateAndCityAndPincodeAndStreetAndBuildingName(country, state,
-					city, pincode, street, buildingName);
+            Address address = addressRepo.findByCountryAndStateAndCityAndPincodeAndStreetAndBuildingName(country, state,
+                    city, pincode, street, buildingName);
 
 			if (address == null) {
-				address = new Address(country, state, city, pincode, street, buildingName);
-
-				address = addressRepo.save(address);
+				address = getAddress(country, state, city, pincode, street, buildingName);
 			}
 
 			user.setAddresses(List.of(address));
@@ -97,6 +95,20 @@ public class UserServiceImpl implements UserService {
 			throw new APIException("User already exists with emailId: " + userDTO.getEmail());
 		}
 
+	}
+
+	private Address getAddress(String country, String state, String city, String pincode, String street, String buildingName) {
+		Address address;
+		address = new Address();
+		address.setCountry(country);
+		address.setState(state);
+		address.setCity(city);
+		address.setPincode(pincode);
+		address.setStreet(street);
+		address.setBuildingName(buildingName);
+
+		address = addressRepo.save(address);
+		return address;
 	}
 
 	@Override
@@ -192,11 +204,10 @@ public class UserServiceImpl implements UserService {
 					city, pincode, street, buildingName);
 
 			if (address == null) {
-				address = new Address(country, state, city, pincode, street, buildingName);
+//				address = new Address(country, state, city, pincode, street, buildingName);
+				Address address1 = getAddress(country, state, city, pincode, street, buildingName);
 
-				address = addressRepo.save(address);
-
-				user.setAddresses(List.of(address));
+				user.setAddresses(List.of(address1));
 			}
 		}
 
