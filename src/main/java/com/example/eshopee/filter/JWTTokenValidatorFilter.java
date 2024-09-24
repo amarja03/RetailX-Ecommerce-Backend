@@ -57,6 +57,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = request.getHeader(AppConstants.JWT_HEADER);
+        //print the jwt token
         if (jwt != null) {
             try {
                 String secret = AppConstants.JWT_SECRET_DEFAULT;
