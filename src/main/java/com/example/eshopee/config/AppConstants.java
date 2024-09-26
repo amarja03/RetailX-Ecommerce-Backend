@@ -12,7 +12,7 @@ public class AppConstants {
 	public static final Long ADMIN_ID = 101L;
 	public static final Long USER_ID = 102L;
 	public static final long JWT_TOKEN_VALIDITY = 86400000;
-	public static final String[] PUBLIC_URLS = { "/swagger-ui.html","/v3/api-docs/**", "/swagger-ui/**", "/api/register/**", "/api/login" };
+	public static final String[] PUBLIC_URLS = { "/swagger-ui.html","/v3/api-docs/**", "/swagger-ui/**", "/api/register/**", "/api/login", "/api/health" };
 	public static final String[] USER_URLS = { "/api/public/**" };
 	public static final String[] ADMIN_URLS = { "/api/admin/**" };
 
