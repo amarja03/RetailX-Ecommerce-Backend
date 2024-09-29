@@ -1,5 +1,6 @@
 package com.example.eshopee.controllers;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class HealthCheckController {
 
-    @RequestMapping("/health")
+    @GetMapping("/health")
     public String healthCheck() {
         return "Service is up and running";
     }
