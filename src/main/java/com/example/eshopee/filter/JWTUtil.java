@@ -25,7 +25,7 @@ public class JWTUtil {
 		String secret = AppConstants.JWT_SECRET_DEFAULT;
 		SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 
-        return Jwts.builder().issuer("EShopee").subject("JWT Token")
+        return Jwts.builder().issuer("RetailX").subject("JWT Token")
 				.claim("username", email)
 				.claim("authorities", authority)
 				.issuedAt(new Date())

@@ -48,7 +48,7 @@ public class ProjectConfig {
                         .authenticationEntryPoint((request, response, authException) ->
                                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
                 )
-                .formLogin(Customizer.withDefaults());
+                .formLogin(Customizer.withDefaults()); //This enables default login form from Spring Boot (although in JWT systems it’s usually unused).
 
 
 
@@ -57,7 +57,10 @@ public class ProjectConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();  //This encrypts passwords in the database
+                                            //✔ BCrypt is the safest and standard method
+                                            //Example encrypted password:
+                                            //$2a$10$afKbcJH1jkL...
     }
 
     @Bean

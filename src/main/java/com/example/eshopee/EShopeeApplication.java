@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableWebSecurity
 @EnableScheduling
 public class EShopeeApplication {
-
+ 
     public static void main(String[] args) {
         SpringApplication.run(EShopeeApplication.class, args);
     }
