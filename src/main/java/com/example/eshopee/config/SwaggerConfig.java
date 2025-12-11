@@ -22,7 +22,7 @@ public class SwaggerConfig {
 		return new OpenAPI().info(new Info().title("E-Commerce Application")
 			.description("Backend APIs for E-Commerce app")
 			.version("v1.0.0")
-			.contact(new Contact().name("Jayndra Todawat").url("https://github.com/Jaytodawat").email("jayandratodawat@gmail.com"))
+			.contact(new Contact().name("Amarja Sawai").url("https://github.com/amarja03").email("amarjasawai3123@gmail.com"))
 			.license(new License().name("License").url("/")))
 				.addSecurityItem(new SecurityRequirement().addList("JavaInUseSecurityScheme"))
 				.components(new Components().addSecuritySchemes("JavaInUseSecurityScheme", new SecurityScheme()
